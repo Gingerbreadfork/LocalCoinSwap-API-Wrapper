@@ -4,11 +4,10 @@ Python Wrapper for the LocalCoinSwap API. This wrapper is currently incomplete a
 ### **Using the Wrapper:**
 
 1. Clone this repository into your project folder
+2. Setup virtualenv if desired and install requirements ```pip install -r requirements.txt```
 2. Create ```.env``` file with your API key in the format ```TOKEN="your_token"```
 3. Import the modules from the wrapper directory as follows.
-
 ```from wrapper import *```
-
 
 ### **Examples of Use:**
 
