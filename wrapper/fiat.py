@@ -1,67 +1,68 @@
 from .config import api, log
 
+class Fiat:
+    def __init__(self):
+        self.endpoint = "currencies/fiat-currencies/"
+        self.params = {"limit": "200", "offset": "0"}
+        self.response = api.get(self.endpoint, params=self.params)
+        self.results = self.response.json()['results']
 
-def currencies(limit=200, offset=0):
-    ''' Get List of Supported Fiat Base Pairs
-        Returns: List of Dicts'''
+        if self.response.status_code == 200:
+            log.info = "Payment Methods Gathered Sucessfully"
+        else:
+            log.warning = "Unable to Collect Payment Methods"
 
-    params = {'limit': limit, 'offset': offset}
-    url = "currencies/fiat-currencies/"
-    response = api.get(url, params=params)
-    methods_response = response.json()['results']
+    @property
+    def currencies(self):
+        ''' Get List of Supported Fiat Base Pairs
+            Returns: List of Dicts'''
 
-    methods = []
+        currency_list = []
 
-    # Filter Primary Message Data from Response
-    for method in methods_response:
-        message_data = dict(
-            [
-                ('symbol', method['symbol']),
-                ('title', method['title']),
-                ]
-            )
+        # Filter Primary Message Data from Response
+        for currency in self.results:
+            currency_data = dict(
+                [
+                    ('symbol', currency['symbol']),
+                    ('title', currency['title']),
+                    ]
+                )
 
-        methods.append(message_data)
+            currency_list.append(currency_data)
 
-    return methods
+        return currency_list
 
+    @property
+    def tickers(self):
+        ''' Get List of Supported Fiat Base Pairs - Tickers only
+            Returns: List of Tickers/Symbols'''
 
-def tickers(limit=200, offset=0):
-    ''' Get List of Supported Fiat Base Pairs - Tickers only
-        Returns: List of Tickers/Symbols'''
+        ticker_list = []
 
-    params = {'limit': limit, 'offset': offset}
-    url = "currencies/fiat-currencies/"
-    response = api.get(url, params=params)
-    methods_response = response.json()['results']
+        # Filter Primary Message Data from Response
+        for ticker in self.results:
+            ticker_list.append(ticker['symbol'])
 
-    methods = []
+        return ticker_list
 
-    # Filter Primary Message Data from Response
-    for method in methods_response:
-        methods.append(method['symbol'])
+    @property
+    def titles(self):
+        ''' Get List of Supported Fiat Base Pairs - Titles only
+            Returns: List of Tickers/Symbols'''
 
-    return methods
+        title_list = []
 
+        # Filter Primary Message Data from Response
+        for title in self.results:
+            title_list.append(title['title'])
 
-def titles(limit=200, offset=0):
-    ''' Get List of Supported Fiat Base Pairs - Titles only
-        Returns: List of Tickers/Symbols'''
+        return title_list
+    
+    def update(self):
+        ''' Refresh Currency Data
+            Returns: Status Code of Request'''
 
-    params = {'limit': limit, 'offset': offset}
-    url = "currencies/fiat-currencies/"
-    response = api.get(url, params=params)
-    methods_response = response.json()['results']
-
-    if response.status_code == 200:
-        log.info = "Payment Methods Gathered Sucessfully"
-    else:
-        log.warning = "Unable to Collect Payment Methods"
-
-    methods = []
-
-    # Filter Primary Message Data from Response
-    for method in methods_response:
-        methods.append(method['title'])
-
-    return methods
+        self.response = api.get(self.endpoint)
+        self.results = self.response.json()['results']
+        
+        return self.response.status_code

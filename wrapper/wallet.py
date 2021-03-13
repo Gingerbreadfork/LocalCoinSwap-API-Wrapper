@@ -1,6 +1,5 @@
 from .config import api, log
 
-
 def reset_allowance(ticker):
     ''' Reset Allowance (Typically Used with USDT)
         Returns: Status Code'''
@@ -107,30 +106,3 @@ def custodial_withdrawal(crypto, destination, amount):
         log.warning("Unknown Error Occured")
         
     return response.status_code
-
-def portfolio():
-    ''' Get Portfolio Overview
-            Returns: List of Dicts'''
-
-    url = "wallets/portfolio/"
-    response = api.get(url)
-    portfolio_data = response.json()
-
-    print(portfolio_data)
-    
-    return portfolio
-
-def total_value():
-    ''' Get Total Portfolio Value in Fiat
-            Returns: list [Value, Fiat Pair]'''
-
-    url = "wallets/portfolio/"
-    response = api.get(url)
-    portfolio_value = response.json()
-
-    value = [
-        portfolio_value["total_fiat_all_crypto"],
-        portfolio_value["local_currency_symbol"]
-        ]
-
-    return value

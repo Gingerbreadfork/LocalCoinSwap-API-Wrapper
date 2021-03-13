@@ -1,7 +1,6 @@
 from .config import api, log
 from datetime import datetime
 
-
 def trades(alive=True, limit=10):
     ''' List Trades of All Stutuses
             Returns: List of Dicts'''
@@ -209,12 +208,4 @@ def latest(*args):
     log.info(f"Latest Trade UUID:{most_recent_uuid}")
     
     return most_recent_uuid
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
